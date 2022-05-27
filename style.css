@@ -20,6 +20,9 @@ body {
 }
 
 .display {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin-top: 23px;
 	border: solid 2px black;
 	height: 64px;

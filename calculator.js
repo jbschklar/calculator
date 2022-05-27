@@ -24,3 +24,6 @@ const operate = function (a, operator, b) {
 };
 
 console.log(operate(10, "/", 5));
+
+const display = document.querySelector(".display");
+display.textContent = 80085;
