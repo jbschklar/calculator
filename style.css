@@ -43,3 +43,8 @@ body {
 .btns :nth-child(2) {
 	size: 2fr;
 }
+
+.clear,
+.delete {
+	grid-column: span 2;
+}
