@@ -7,7 +7,7 @@ const btnsOperator = document.querySelectorAll(".btn-operator");
 const btnsCommand = document.querySelectorAll(".btn-command");
 const btnEquals = document.querySelector(".equals");
 const btnClear = document.querySelector(".clear");
-display.textContent = 80085;
+display.textContent = 0;
 let numCurr = [];
 let numSelectionA;
 let numSelectionB;
@@ -57,21 +57,28 @@ const init = function () {
 btnsMain.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
-
 		if (e.target.classList.contains("btn-num")) {
-			numCurr.push(+selection);
-			console.log(numCurr);
+			selection = +selection;
+			numCurr.push(selection);
+			display.textContent = numCurr.join("");
 		} else {
-			if (total) numSelectionA = total;
 			numSelectionA
 				? (numSelectionB = +numCurr.join(""))
 				: (numSelectionA = +numCurr.join(""));
-			if (e.target.classList.contains("btn-operator")) opSelection = selection;
+			if (e.target.classList.contains("btn-operator")) {
+				opSelection = selection;
+			}
 			numCurr = [];
 			total = operate(numSelectionA, opSelection, numSelectionB);
-			display.textContent = total;
+			if (total) {
+				display.textContent = total;
+				numSelectionA = total;
+			}
 		}
 	});
 });
 
 btnClear.addEventListener("click", init);
+
+// need to solve click of equal sign followed by num not starting over.
+// it is related to the if(total) code.
