@@ -12,7 +12,10 @@ let numCurr = [];
 let numSelectionA;
 let numSelectionB;
 let opSelection;
+let opSelectionB;
 let total;
+let active = true;
+
 const add = function (a, b) {
 	return a + b;
 };
@@ -54,6 +57,10 @@ const init = function () {
 	console.log(numSelectionA, numSelectionB, opSelection, total);
 };
 
+// btnEquals.addEventListener("click", function () {
+// 	active = false;
+// });
+
 btnsMain.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
@@ -65,16 +72,39 @@ btnsMain.forEach((btn) => {
 			numSelectionA
 				? (numSelectionB = +numCurr.join(""))
 				: (numSelectionA = +numCurr.join(""));
+
 			if (e.target.classList.contains("btn-operator")) {
-				opSelection = selection;
+				if (opSelection) {
+					total = operate(numSelectionA, opSelection, numSelectionB);
+					opSelection = selection;
+					console.log(numSelectionA, opSelection, numSelectionB);
+				} else {
+					opSelection = selection;
+					if (numSelectionA && opSelection && numSelectionB) {
+						total = operate(numSelectionA, opSelection, numSelectionB);
+					}
+				}
 			}
 			numCurr = [];
-			total = operate(numSelectionA, opSelection, numSelectionB);
+			if (e.target.classList.contains("equals")) {
+				console.log(numSelectionA, opSelection, numSelectionB);
+				total = operate(numSelectionA, opSelection, numSelectionB);
+				opSelection = undefined;
+				console.log(total);
+			}
+			// if (numSelectionA && opSelection && numSelectionB) {
+			// 	total = operate(numSelectionA, opSelection, numSelectionB);
+			// 	opSelection = undefined;
+			// }
+
 			if (total) {
 				display.textContent = total;
 				numSelectionA = total;
 			}
 		}
+		// if (e.target.classList.contains("btn-num") && !active) {
+		// 	total = undefined;
+		// }
 	});
 });
 
