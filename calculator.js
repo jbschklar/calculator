@@ -14,7 +14,7 @@ let numSelectionB;
 let opSelection;
 let opSelectionB;
 let total;
-let active = true;
+let equalClicked;
 
 const add = function (a, b) {
 	return a + b;
@@ -54,12 +54,7 @@ const init = function () {
 	opSelection = undefined;
 	total = undefined;
 	display.textContent = 0;
-	console.log(numSelectionA, numSelectionB, opSelection, total);
 };
-
-// btnEquals.addEventListener("click", function () {
-// 	active = false;
-// });
 
 btnsMain.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
@@ -68,7 +63,18 @@ btnsMain.forEach((btn) => {
 			selection = +selection;
 			numCurr.push(selection);
 			display.textContent = numCurr.join("");
+
+			// To prevent carryover of values is number clicked
+			//instead of another operator after eqaul has given a total
+			if (equalClicked) {
+				total = undefined;
+				numSelectionA = undefined;
+				numSelectionB = undefined;
+			}
 		} else {
+			// Reset to continue calculations if operator clicked after an equal has totalled.
+			equalClicked = false;
+
 			numSelectionA
 				? (numSelectionB = +numCurr.join(""))
 				: (numSelectionA = +numCurr.join(""));
@@ -77,7 +83,6 @@ btnsMain.forEach((btn) => {
 				if (opSelection) {
 					total = operate(numSelectionA, opSelection, numSelectionB);
 					opSelection = selection;
-					console.log(numSelectionA, opSelection, numSelectionB);
 				} else {
 					opSelection = selection;
 					if (numSelectionA && opSelection && numSelectionB) {
@@ -87,28 +92,19 @@ btnsMain.forEach((btn) => {
 			}
 			numCurr = [];
 			if (e.target.classList.contains("equals")) {
-				console.log(numSelectionA, opSelection, numSelectionB);
 				total = operate(numSelectionA, opSelection, numSelectionB);
 				opSelection = undefined;
-				console.log(total);
+				equalClicked = true;
 			}
-			// if (numSelectionA && opSelection && numSelectionB) {
-			// 	total = operate(numSelectionA, opSelection, numSelectionB);
-			// 	opSelection = undefined;
-			// }
 
 			if (total) {
 				display.textContent = total;
 				numSelectionA = total;
 			}
 		}
-		// if (e.target.classList.contains("btn-num") && !active) {
-		// 	total = undefined;
-		// }
 	});
 });
 
 btnClear.addEventListener("click", init);
 
-// need to solve click of equal sign followed by num not starting over.
-// it is related to the if(total) code.
+// Need to fix decimal function
