@@ -17,19 +17,25 @@ let total;
 let equalClicked;
 
 const add = function (a, b) {
-	return a + b;
+	let total = a + b;
+	return total % 1 !== 0 ? +total.toFixed(2) : total;
 };
 
 const subtract = function (a, b) {
-	return a - b;
+	let total = a - b;
+	return total % 1 !== 0 ? +total.toFixed(2) : total;
 };
 
 const multiply = function (a, b) {
-	return a * b;
+	let total = a * b;
+	return total % 1 !== 0 ? +total.toFixed(2) : total;
 };
 
 const divide = function (a, b) {
-	return a / b;
+	if (b === 0) return;
+
+	let total = a / b;
+	return total % 1 !== 0 ? +total.toFixed(2) : total;
 };
 
 const operate = function (a, operator, b) {
