@@ -60,7 +60,7 @@ btnsMain.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
 		if (e.target.classList.contains("btn-num")) {
-			selection = +selection;
+			selection = selection === "." ? selection : +selection;
 			numCurr.push(selection);
 			display.textContent = numCurr.join("");
 
