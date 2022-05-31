@@ -5,7 +5,6 @@ const btnsNum = document.querySelectorAll(".btn-num");
 const btnsMain = document.querySelectorAll(".btn-main");
 const btnsOperator = document.querySelectorAll(".btn-operator");
 const btnsCommand = document.querySelectorAll(".btn-command");
-const btnEquals = document.querySelector(".equals");
 const btnClear = document.querySelector(".clear");
 display.textContent = 0;
 let numCurr = [];
@@ -65,13 +64,15 @@ const init = function () {
 btnsMain.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
+		// to prevent multiple decimal points in user entry
+		if (numCurr.includes(".") && selection === ".") return;
 		if (e.target.classList.contains("btn-num")) {
 			selection = selection === "." ? selection : +selection;
 			numCurr.push(selection);
 			display.textContent = numCurr.join("");
 
-			// To prevent carryover of values is number clicked
-			//instead of another operator after eqaul has given a total
+			// To prevent carryover of values if a number is clicked
+			//instead of another operator after equal has given a total
 			if (equalClicked) {
 				total = undefined;
 				numSelectionA = undefined;
