@@ -94,15 +94,9 @@ btnsOperator.forEach((btn) => {
 		// Reset to continue calculations if operator clicked after an equal has totalled.
 		equalClicked = false;
 
-		if (total) {
-			console.log(total, numSelectionA, numSelectionB);
-			display.textContent = total;
-			numSelectionA = total;
-		}
-
 		if (numSelectionA) numSelectionB = +numCurr.join("");
 		if (!numSelectionA) numSelectionA = +numCurr.join("");
-
+		numCurr = [];
 		console.log(numSelectionA, numSelectionB);
 
 		if (e.target.classList.contains("equals")) {
@@ -111,7 +105,7 @@ btnsOperator.forEach((btn) => {
 			opSelection = undefined;
 			equalClicked = true;
 			display.textContent = total;
-			console.log(total);
+			numSelectionA = total;
 		}
 
 		// Checks to see if an operator has already been selected as part
@@ -125,8 +119,10 @@ btnsOperator.forEach((btn) => {
 			total = operate(numSelectionA, opSelection, numSelectionB);
 		}
 
-		numCurr = [];
-
+		if (total) {
+			display.textContent = total;
+			numSelectionA = total;
+		}
 		console.log(total);
 	});
 });
