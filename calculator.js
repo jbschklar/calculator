@@ -96,31 +96,33 @@ btnsNum.forEach((btn) => {
 btnsOperator.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
+
+		// to make sure equal isn't clicked without a number first to total
+		if (selection === "=" && !numSelectionA) return;
+
 		// Reset to continue calculations if operator clicked after an equal has totalled.
 		equalClicked = false;
 
 		if (numSelectionA) numSelectionB = +numCurr.join("");
 		if (!numSelectionA) numSelectionA = +numCurr.join("");
 		numCurr = [];
-		console.log(numSelectionA, numSelectionB);
 
-		if (e.target.classList.contains("equals")) {
+		// Checks to see if an operator is the inital operator or part of an ongoing calculation.
+		if (opSelection && selection !== "=") {
+			total = operate(numSelectionA, opSelection, numSelectionB);
+			opSelection = selection;
+		}
+		if (!opSelection && selection) {
+			opSelection = selection;
+			total = operate(numSelectionA, opSelection, numSelectionB);
+		}
+
+		if (selection === "=") {
 			total = operate(numSelectionA, opSelection, numSelectionB);
 			console.log(numSelectionA, opSelection, numSelectionB);
 			opSelection = undefined;
 			equalClicked = true;
 			totalOngoing(total);
-		}
-
-		// Checks to see if an operator has already been selected as part
-		// of an ongoing calculation before equal or clear is clicked.
-		if (opSelection) {
-			total = operate(numSelectionA, opSelection, numSelectionB);
-			opSelection = selection;
-		}
-		if (!opSelection) {
-			opSelection = selection;
-			total = operate(numSelectionA, opSelection, numSelectionB);
 		}
 
 		if (total) {
