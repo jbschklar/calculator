@@ -6,7 +6,8 @@ const btnsMain = document.querySelectorAll(".btn-main");
 const btnsOperator = document.querySelectorAll(".btn-operator");
 const btnsCommand = document.querySelectorAll(".btn-command");
 const btnClear = document.querySelector(".clear");
-display.textContent = 0;
+const btnDelete = document.querySelector(".delete");
+
 let numCurr = [];
 let numSelectionA;
 let numSelectionB;
@@ -61,6 +62,12 @@ const init = function () {
 	display.textContent = 0;
 };
 
+const backSpace = function () {
+	if (!numCurr[0]) return;
+	numCurr.pop();
+	display.textContent = numCurr.join("");
+};
+
 btnsMain.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
@@ -87,17 +94,17 @@ btnsMain.forEach((btn) => {
 				: (numSelectionA = +numCurr.join(""));
 
 			if (e.target.classList.contains("btn-operator")) {
+				// Checks to see if an operator has already been selected as part
+				// of an ongoing calculation before equal or clear is clicked.
 				if (opSelection) {
 					total = operate(numSelectionA, opSelection, numSelectionB);
 					opSelection = selection;
-				} else {
+				}
+				if (!opSelection) {
 					opSelection = selection;
-					if (numSelectionA && opSelection && numSelectionB) {
-						total = operate(numSelectionA, opSelection, numSelectionB);
-					}
+					total = operate(numSelectionA, opSelection, numSelectionB);
 				}
 			}
-			numCurr = [];
 			if (e.target.classList.contains("equals")) {
 				total = operate(numSelectionA, opSelection, numSelectionB);
 				opSelection = undefined;
@@ -108,10 +115,13 @@ btnsMain.forEach((btn) => {
 				display.textContent = total;
 				numSelectionA = total;
 			}
+			numCurr = [];
 		}
 	});
 });
 
 btnClear.addEventListener("click", init);
 
-// Need to fix decimal function
+btnDelete.addEventListener("click", backSpace);
+
+display.textContent = 0;
