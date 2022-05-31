@@ -54,6 +54,11 @@ const operate = function (a, operator, b) {
 	if (operator === "/") return divide(a, b);
 };
 
+const totalOngoing = function (total) {
+	display.textContent = total;
+	numSelectionA = total;
+};
+
 const init = function () {
 	numCurr = [];
 	numSelectionA = undefined;
@@ -104,8 +109,7 @@ btnsOperator.forEach((btn) => {
 			console.log(numSelectionA, opSelection, numSelectionB);
 			opSelection = undefined;
 			equalClicked = true;
-			display.textContent = total;
-			numSelectionA = total;
+			totalOngoing(total);
 		}
 
 		// Checks to see if an operator has already been selected as part
@@ -120,10 +124,8 @@ btnsOperator.forEach((btn) => {
 		}
 
 		if (total) {
-			display.textContent = total;
-			numSelectionA = total;
+			totalOngoing(total);
 		}
-		console.log(total);
 	});
 });
 
