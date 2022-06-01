@@ -74,6 +74,27 @@ const backSpace = function () {
 	display.textContent = numCurr.join("");
 };
 
+document.addEventListener("keydown", function (e) {
+	if ((e.key >= "0" && e.key <= "9") || e.key === ".") {
+		let selection = e.key;
+		console.log(selection);
+
+		// to prevent multiple decimal points in user entry
+		// if (numCurr.includes(".") && selection === ".") return;
+
+		// selection = selection === "." ? selection : +selection;
+		// numCurr.push(selection);
+		// display.textContent = numCurr.join("");
+		// // To prevent carryover of values if a number is clicked
+		// //instead of another operator after equal has given a total
+		// if (equalClicked) {
+		// 	total = undefined;
+		// 	numSelectionA = undefined;
+		// 	numSelectionB = undefined;
+		// }
+	}
+});
+
 btnsNum.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
