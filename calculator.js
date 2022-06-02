@@ -167,5 +167,3 @@ btnsOperator.forEach((btn) => {
 btnClear.addEventListener("click", init);
 
 btnDelete.addEventListener("click", backSpace);
-
-// display.textContent = 0;
