@@ -24,6 +24,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	gap: 12px;
 	margin-top: 23px;
 	border: solid 2px black;
 	height: 64px;
@@ -31,6 +32,11 @@ body {
 	background-color: rgb(210, 206, 206);
 	font-size: 22px;
 }
+
+/* .display-operator {
+	
+	
+} */
 
 .btns {
 	margin-top: 32px;

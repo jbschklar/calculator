@@ -1,6 +1,8 @@
 "use strict";
 
 const display = document.querySelector(".display");
+const displayNum = document.querySelector(".display-num");
+const displayOperator = document.querySelector(".display-operator");
 const btnsNum = document.querySelectorAll(".btn-num");
 const btnsMain = document.querySelectorAll(".btn-main");
 const btnsOperator = document.querySelectorAll(".btn-operator");
@@ -55,7 +57,7 @@ const operate = function (a, operator, b) {
 };
 
 const totalOngoing = function (total) {
-	display.textContent = total;
+	displayNum.textContent = total;
 	numSelectionA = total;
 };
 
@@ -65,90 +67,99 @@ const init = function () {
 	numSelectionB = undefined;
 	opSelection = undefined;
 	total = undefined;
-	display.textContent = 0;
+	displayNum.textContent = 0;
 };
 
 const backSpace = function () {
 	if (!numCurr[0]) return;
 	numCurr.pop();
-	display.textContent = numCurr.join("");
+	displayNum.textContent = numCurr.join("");
 };
 
+const numInput = function (selection) {
+	displayOperator.textContent = "";
+	// to prevent multiple decimal points in user entry
+	if (numCurr.includes(".") && selection === ".") return;
+
+	selection = selection === "." ? selection : +selection;
+	numCurr.push(selection);
+	displayNum.textContent = numCurr.join("");
+	// To prevent carryover of values if a number is clicked
+	//instead of another operator after equal has given a total
+	if (equalClicked) {
+		total = undefined;
+		numSelectionA = undefined;
+		numSelectionB = undefined;
+	}
+};
+
+const operatorInput = function (selection) {
+	// to make sure equal isn't clicked without a number first to total
+	if (selection === "=" && !numSelectionA) return;
+
+	// Reset to continue calculations if operator clicked after an equal has totalled.
+	equalClicked = false;
+
+	if (numSelectionA) numSelectionB = +numCurr.join("");
+	if (!numSelectionA) numSelectionA = +numCurr.join("");
+	numCurr = [];
+
+	// Checks to see if an operator is the inital operator or part of an ongoing calculation.
+	if (opSelection && selection !== "=") {
+		total = operate(numSelectionA, opSelection, numSelectionB);
+		opSelection = selection;
+	}
+	if (!opSelection && selection) {
+		opSelection = selection;
+		total = operate(numSelectionA, opSelection, numSelectionB);
+	}
+
+	if (selection === "=") {
+		total = operate(numSelectionA, opSelection, numSelectionB);
+		console.log(numSelectionA, opSelection, numSelectionB);
+		opSelection = undefined;
+		equalClicked = true;
+		totalOngoing(total);
+	}
+
+	if (total) {
+		totalOngoing(total);
+	}
+
+	displayOperator.textContent = selection !== "=" ? selection : "";
+};
+
+// to add keyboard functionality
 document.addEventListener("keydown", function (e) {
-	if ((e.key >= "0" && e.key <= "9") || e.key === ".") {
-		let selection = e.key;
-		console.log(selection);
+	let selection = e.key;
+	if ((selection >= "0" && selection <= "9") || selection === ".") {
+		numInput(selection);
+	}
 
-		// to prevent multiple decimal points in user entry
-		// if (numCurr.includes(".") && selection === ".") return;
-
-		// selection = selection === "." ? selection : +selection;
-		// numCurr.push(selection);
-		// display.textContent = numCurr.join("");
-		// // To prevent carryover of values if a number is clicked
-		// //instead of another operator after equal has given a total
-		// if (equalClicked) {
-		// 	total = undefined;
-		// 	numSelectionA = undefined;
-		// 	numSelectionB = undefined;
-		// }
+	if (
+		selection === "+" ||
+		selection === "-" ||
+		selection === "*" ||
+		selection === "/" ||
+		selection === "=" ||
+		selection === "Enter"
+	) {
+		if (selection === "Enter") selection = "=";
+		operatorInput(selection);
 	}
 });
 
 btnsNum.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
-		// to prevent multiple decimal points in user entry
-		if (numCurr.includes(".") && selection === ".") return;
-
-		selection = selection === "." ? selection : +selection;
-		numCurr.push(selection);
-		display.textContent = numCurr.join("");
-		// To prevent carryover of values if a number is clicked
-		//instead of another operator after equal has given a total
-		if (equalClicked) {
-			total = undefined;
-			numSelectionA = undefined;
-			numSelectionB = undefined;
-		}
+		numInput(selection);
 	});
 });
 
 btnsOperator.forEach((btn) => {
 	btn.addEventListener("click", function (e) {
 		let selection = e.target.textContent;
-
-		// to make sure equal isn't clicked without a number first to total
-		if (selection === "=" && !numSelectionA) return;
-
-		// Reset to continue calculations if operator clicked after an equal has totalled.
-		equalClicked = false;
-
-		if (numSelectionA) numSelectionB = +numCurr.join("");
-		if (!numSelectionA) numSelectionA = +numCurr.join("");
-		numCurr = [];
-
-		// Checks to see if an operator is the inital operator or part of an ongoing calculation.
-		if (opSelection && selection !== "=") {
-			total = operate(numSelectionA, opSelection, numSelectionB);
-			opSelection = selection;
-		}
-		if (!opSelection && selection) {
-			opSelection = selection;
-			total = operate(numSelectionA, opSelection, numSelectionB);
-		}
-
-		if (selection === "=") {
-			total = operate(numSelectionA, opSelection, numSelectionB);
-			console.log(numSelectionA, opSelection, numSelectionB);
-			opSelection = undefined;
-			equalClicked = true;
-			totalOngoing(total);
-		}
-
-		if (total) {
-			totalOngoing(total);
-		}
+		operatorInput(selection);
 	});
 });
 
@@ -156,4 +167,4 @@ btnClear.addEventListener("click", init);
 
 btnDelete.addEventListener("click", backSpace);
 
-display.textContent = 0;
+// display.textContent = 0;
