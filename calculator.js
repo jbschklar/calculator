@@ -68,6 +68,7 @@ const init = function () {
 	opSelection = undefined;
 	total = undefined;
 	displayNum.textContent = 0;
+	displayOperator.textContent = "";
 };
 
 const backSpace = function () {
