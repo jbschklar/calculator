@@ -148,6 +148,7 @@ document.addEventListener("keydown", function (e) {
 		if (selection === "Enter") selection = "=";
 		operatorInput(selection);
 	}
+	if (selection === "Backspace") backSpace();
 });
 
 btnsNum.forEach((btn) => {
